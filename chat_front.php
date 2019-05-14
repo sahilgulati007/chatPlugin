@@ -50,6 +50,8 @@ function chat_front()
                 <input type="hidden" name="cid" id="cid" value="">
                 <input name="usermsg" type="text" id="usermsg" size="30" style="margin: 5px"/>
 <!--                <input name="submitmsg" type="submit" id="submitmsg" value="Send"/>-->
+                <br>
+                <input type="file" id="file_upload" value="Attachment" class="btn" style="margin: 1px;" >
 
             </form>
             <button id="snd" type="button" class="btn" style="width: 100%; margin: 1px;"  >SEND</button>

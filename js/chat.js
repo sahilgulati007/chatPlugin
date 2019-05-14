@@ -3,15 +3,46 @@ jQuery( document ).ready(function() {
         jQuery('#cid').val(sessionStorage.getItem("cid"));
     }
     //alert();
+    jQuery('#file_upload').change(function(e){
+        var fileName = e.target.files[0].name;
+        alert('The file "' + fileName +  '" has been selected.');
+        var fd= new FormData();
+        var file = jQuery('#file_upload');
+        var individual_file = file[0].files[0];
+        fd.append('action', 'send_chat');
+        fd.append('filev',individual_file);
+        fd.append('cid', jQuery('#cid').val());
+        jQuery.ajax({
+            type: 'POST',
+            url: ajax_object.ajaxurl,
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                console.log(response);
+                jQuery('#file_upload').val('');
+            }
+        });
+    });
     jQuery('#snd').click(function () {
         //alert(jQuery('#usermsg').val());
         //alert(ajax_object.ajaxurl);
+        // var fd= new FormData();
+        // var file = jQuery('#file_upload');
+        // var individual_file = file[0].files[0];
+        // console.log(individual_file);
+        // // debugger;
+        // // return;
+        // fd.append('action', 'send_chat');
+        // fd.append('msg', jQuery('#usermsg').val());
+        // fd.append('cid', jQuery('#cid').val());
+        // fd.append('filev',individual_file);
         var data = {
             'action': 'send_chat',
             'msg': jQuery('#usermsg').val(),     // We pass php values differently!
             'cid': jQuery('#cid').val()
         };
-        // We can also pass the url value separately from ajaxurl for front end AJAX implementations
+        //We can also pass the url value separately from ajaxurl for front end AJAX implementations
         jQuery.post(ajax_object.ajaxurl, data, function(response) {
             //alert('Got this from the server: ' + response);
             jQuery('#usermsg').val('');
@@ -27,6 +58,30 @@ jQuery( document ).ready(function() {
                 jQuery('#notifiy').css('display','none');
             });
         });
+        // jQuery.ajax({
+        //     type: 'POST',
+        //     url: ajax_object.ajaxurl,
+        //     data: fd,
+        //     contentType: false,
+        //     processData: false,
+        //     success: function(response){
+        //         alert('in');
+        //         jQuery('#usermsg').val('');
+        //         setTimeout(function(){jQuery("#chatbox").animate({ scrollTop: $('#chatbox').prop("scrollHeight")}, 0);},3000);
+        //         var id=jQuery('#cid').val();
+        //         //alert(id);
+        //         var data = {
+        //             'action': 'update_chat',
+        //             'cid': id
+        //         };
+        //         jQuery.post(ajax_object.ajaxurl, data, function(response) {
+        //             //alert(response);
+        //             jQuery('#notifiy').css('display','none');
+        //         });
+        //
+        //         console.log(response);
+        //     }
+        // });
     });
     jQuery('#enter').click(function () {
         //alert(jQuery('#cname').val());
@@ -72,9 +127,9 @@ jQuery( document ).ready(function() {
                   console.log(arrayItem);
                   var m= arrayItem.dtext;
                     if(arrayItem.texttype=='0')
-                        html+= '<div style="float: left;">'+ arrayItem.dtext +'</div><br>';
+                        html+= '<div style="float: left; width: 100%;text-align: left">'+ arrayItem.dtext +'</div><br>';
                     else
-                        html+= '<div style="float: right;">'+ arrayItem.dtext +'</div><br>';
+                        html+= '<div style="float: right; width: 100%;text-align: right">'+ arrayItem.dtext +'</div><br>';
                     //alert(arrayItem.notify);
                     //border: 1px solid #2e4453;border-radius: 25px; padding: 1px;
                     if(arrayItem.notifiy==1 && arrayItem.texttype == '0'){
@@ -105,9 +160,9 @@ jQuery( document ).ready(function() {
                     console.log(arrayItem);
                     var m= arrayItem.dtext;
                     if(arrayItem.texttype=='0')
-                        html+= '<div style="float: right">'+ arrayItem.dtext +'</div><br>';
+                        html+= '<div style="float: right; width: 100%;text-align: right">'+ arrayItem.dtext +'</div><br>';
                     else
-                        html+= '<div style="float: left">'+ arrayItem.dtext +'</div><br>';
+                        html+= '<div style="float: left;  width: 100%;text-align: left">'+ arrayItem.dtext +'</div><br>';
 
                     //jQuery('#chatbox').append('<div>'+ arrayItem.dtext +'</div>')
                 });
