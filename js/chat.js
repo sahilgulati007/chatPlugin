@@ -5,7 +5,7 @@ jQuery( document ).ready(function() {
     //alert();
     jQuery('#file_upload').change(function(e){
         var fileName = e.target.files[0].name;
-        alert('The file "' + fileName +  '" has been selected.');
+        //alert('The file "' + fileName +  '" has been selected.');
         var fd= new FormData();
         var file = jQuery('#file_upload');
         var individual_file = file[0].files[0];

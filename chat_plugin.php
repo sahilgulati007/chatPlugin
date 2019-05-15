@@ -85,7 +85,7 @@ add_action( 'wp_ajax_nopriv_send_chat', 'send_chat' );
 function send_chat() {
     global $wpdb; // this is how you get access to the database
 
-    if(isset($_FILES)){
+    if(isset($_FILES) && $_FILES['filev']['size']>0){
         //var_dump($_FILES);
         if (!function_exists('wp_handle_upload')) {
             require_once(ABSPATH . 'wp-admin/includes/file.php');
