@@ -5,8 +5,8 @@ function chat_view(){
         //var_dump($_FILES);
         echo $_FILES['filev']['size'];
         if(isset($_FILES) && $_FILES['filev']['size']>0){
-            echo 'in';
-            var_dump($_FILES);
+//            echo 'in';
+//            var_dump($_FILES);
             if (!function_exists('wp_handle_upload')) {
                 require_once(ABSPATH . 'wp-admin/includes/file.php');
             }
@@ -70,9 +70,9 @@ function chat_view(){
     foreach ($result as $r){
 
         if($r->texttype=='0')
-            echo "<div style='float: right'>".$r->dtext."</div><br>";
+            echo "<div style='float: right; width: 100%;text-align: right'>".$r->dtext."</div><br>";
         else
-            echo "<div style='float: left'>".$r->dtext."</div><br>";
+            echo "<div style='float: left; width: 100%;text-align: left'>".$r->dtext."</div><br>";
     }
     echo "</div>";
     $wpdb->update(

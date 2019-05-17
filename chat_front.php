@@ -6,18 +6,24 @@ function chat_front()
     <button class="open-button" onclick="openForm()">Chat<span id="notifiy" style="background: #993300;float: right;font-size: 10px; display: none">New</span></button>
 
     <div class="chat-popup" id="myForm">
+
     <?php
     function loginForm()
     {
         echo '
     <div id="loginform">
+    <div id="menu">
+            <p class="welcome"> <button type="button" class="cancelbtn" onclick="closeForm()" style=" margin: 1px;float: right;padding: 8px;">x</button></p>
+            <!--                <p class="logout"><a id="exit" href="#">Exit Chat</a></p>-->
+            <div style="clear:both"></div>
+        </div>
     <form action="" method="post">
-        <p>Please enter your name to continue:</p>
-        <label for="name">Name:</label>
-        <input type="text" name="cname" id="cname" /><br><br>
-        <label for="email">Email:</label>
-        <input type="text" name="em" id="em" /><br><br>
-        <input type="submit" name="enter" id="enter" value="Enter" style="width: 100%; margin: 1px;"/>
+        <p><b>Please enter your name and Email to continue:</b></p>
+        
+        <input type="text" name="cname" id="cname" placeholder="Enter Name" style="width: 97%;" /><br><br>
+        
+        <input type="text" name="em" id="em" placeholder="Enter Email" style="width: 97%;" /><br><br>
+        <input type="submit" name="enter" id="enter" value="Enter" style="width: 100%; margin: 1px;background: "/>
     </form>
     </div>
     ';
@@ -29,7 +35,7 @@ function chat_front()
         if ($_POST['cname'] != "" && $_POST['em'] != "" && preg_match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^",$_POST['em'])) {
             $_SESSION['cname'] = stripslashes(htmlspecialchars($_POST['cname']));
         } else {
-            echo '<span class="error">Please type in a name and a valid email</span>';
+            echo '<span class="error" style="background: red; color: white; width: 100%; text-align: center; display: block">Please type in a valid name and a valid email</span>';
         }
         echo '<script>document.getElementById("myForm").style.display = "block";</script>';
     }
@@ -39,7 +45,7 @@ function chat_front()
 
         <div id="wrapper" class="chatform">
             <div id="menu">
-                <p class="welcome">Welcome, <b><?php echo $_SESSION['cname']; ?></b></p>
+                <p class="welcome">Welcome <b><?php echo $_SESSION['cname']; ?></b> <button type="button" class="cancelbtn" onclick="closeForm()" style=" margin: 1px;float: right;padding: 8px;">x</button></p>
 <!--                <p class="logout"><a id="exit" href="#">Exit Chat</a></p>-->
                 <div style="clear:both"></div>
             </div>
@@ -48,13 +54,15 @@ function chat_front()
 
             <form name="message" action="">
                 <input type="hidden" name="cid" id="cid" value="">
-                <input name="usermsg" type="text" id="usermsg" size="30" style="margin: 5px"/>
+                <input name="usermsg" type="text" id="usermsg" size="30" placeholder="Enter message..." style="margin: 5px;width: 97%;"/>
 <!--                <input name="submitmsg" type="submit" id="submitmsg" value="Send"/>-->
                 <br>
-                <input type="file" id="file_upload" value="Attachment" class="btn" style="margin: 1px;" >
+                <input type="file" id="file_upload" value="Attachment" class="btn" style="margin: 1px; display: none" >
 
             </form>
-            <button id="snd" type="button" class="btn" style="width: 100%; margin: 1px;"  >SEND</button>
+            <button id="snd" type="button" class="btnsnd"   >SEND</button>
+            <img src="<?php echo plugin_dir_url( __FILE__ ) ?>image/camera_icon.png" id="upfile1" style="cursor:pointer" width="20px" height="20px" />
+            <img src="<?php echo plugin_dir_url( __FILE__ ) ?>image/attchment.png" id="upfile2" style="cursor:pointer" width="20px" height="20px" />
         </div>
 
         <?php
@@ -62,7 +70,7 @@ function chat_front()
         loginForm();
     }
     ?>
-        <button type="button" class="btn cancel" onclick="closeForm()" style="width: 100%; margin: 1px;">Close</button>
+<!--        <button type="button" class="cancelbtn" onclick="closeForm()" style="width: 100%; margin: 1px;">Close</button>-->
 
     </div>
     <style>
@@ -120,6 +128,16 @@ function chat_front()
 
         /* Set a style for the submit/send button */
         .form-container .btn {
+             background-color: #4CAF50;
+             color: white;
+             padding: 16px 20px;
+             border: none;
+             cursor: pointer;
+             width: 100%;
+             margin-bottom:10px;
+             opacity: 0.8;
+         }
+        button#snd.btnsnd {
             background-color: #4CAF50;
             color: white;
             padding: 16px 20px;
@@ -133,6 +151,20 @@ function chat_front()
         /* Add a red background color to the cancel button */
         .form-container .cancel {
             background-color: red;
+        }
+        button.cancelbtn {
+            background-color: red;
+
+        }
+
+        #menu{
+
+            background: #4CAF50;
+            color: white;
+            padding-left: 5px;
+        }
+        #menu p{
+            margin: 0;
         }
 
         /* Add some hover effects to buttons */

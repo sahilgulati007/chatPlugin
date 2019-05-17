@@ -202,6 +202,12 @@ jQuery( document ).ready(function() {
 
         }, 3000);
     }
+    jQuery('#upfile1').click(function () {
+        jQuery('#file_upload').click();
+    });
+    jQuery('#upfile2').click(function () {
+        jQuery('#file_upload').click();
+    });
 
 });
 // function sndfnc() {
