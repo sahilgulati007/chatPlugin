@@ -24,6 +24,31 @@ jQuery( document ).ready(function() {
             }
         });
     });
+    jQuery('#snd_admin').click(function () {
+
+        var data = {
+            'action': 'send_chat_admin',
+            'msg': jQuery('#usermsg').val(),     // We pass php values differently!
+            'cid': jQuery('#cid').val()
+        };
+        //We can also pass the url value separately from ajaxurl for front end AJAX implementations
+        jQuery.post(ajax_object.ajaxurl, data, function(response) {
+            //alert('Got this from the server: ' + response);
+            jQuery('#usermsg').val('');
+            setTimeout(function(){jQuery("#chatbox").animate({ scrollTop: $('#chatbox').prop("scrollHeight")}, 0);},3000);
+            var id=jQuery('#cid').val();
+            //alert(id);
+            var data = {
+                'action': 'update_chat_admin',
+                'cid': id
+            };
+            jQuery.post(ajax_object.ajaxurl, data, function(response) {
+                //alert(response);
+                jQuery('#notifiy').css('display','none');
+            });
+        });
+
+    });
     jQuery('#snd').click(function () {
         //alert(jQuery('#usermsg').val());
         //alert(ajax_object.ajaxurl);
@@ -172,15 +197,13 @@ jQuery( document ).ready(function() {
 
         }, 3000);
     }
-    function updatenotifiy() {
-        alert();
-    }
-    if(jQuery("div").hasClass("chat_list")){
+    if(jQuery("div").hasClass("msg_history")){
         setInterval(function(){
             //alert(jQuery('#cid').val());
-            //var id=jQuery('#cid').val();
+            var id=jQuery('#cid').val();
             var data = {
-                'action': 'get_chat_list',
+                'action': 'get_chat',
+                'cid': id
             };
             jQuery.post(ajax_object.ajaxurl, data, function(response) {
                 // alert('Got this from the server: ' + response);
@@ -189,14 +212,87 @@ jQuery( document ).ready(function() {
                 obj.forEach(function (arrayItem) {
                     console.log(arrayItem);
                     var m= arrayItem.dtext;
-                    if(arrayItem.texttype=='0')
-                        html+= '<div style="float: right">'+ arrayItem.dtext +'</div><br>';
-                    else
-                        html+= '<div style="float: left">'+ arrayItem.dtext +'</div><br>';
+                        if(arrayItem.texttype=='0')
+                        {
+                            html+='<div class="outgoing_msg">';
+                            html+='<div class="sent_msg">';
+                            html+='<p>'+ arrayItem.dtext +'</p>';
+                            html+='<span class="time_date"> 11:01 AM    |    June 9</span></div>';
+                            html+='</div>';
 
+                        }
+                        //html+= '<div style="float: right; width: 100%;text-align: right">'+ arrayItem.dtext +'</div><br>';
+                        else
+                        {
+                            html+='<div class="incoming_msg">';
+                            html+='<div class="incoming_msg_img"><img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>';
+                            html+='<div class="received_msg">';
+                            html+='<div class="received_withd_msg">'
+                            html+='<p>'+ arrayItem.dtext +'</p>';
+                            html+='<span class="time_date"> 11:01 AM    |    June 9</span></div>';
+                            html+='</div>';
+                            html+='</div>';
+                        }
                     //jQuery('#chatbox').append('<div>'+ arrayItem.dtext +'</div>')
                 });
                 jQuery('#chatbox').html(html);
+
+            });
+
+        }, 3000);
+    }
+    function updatenotifiy() {
+        alert();
+    }
+    if(jQuery("div").hasClass("chat_list_my")){
+        setInterval(function(){
+            //alert(jQuery('#cid').val());
+            //var id=jQuery('#cid').val();
+            // var data = {
+            //     'action': 'get_chat_list',
+            // };
+            // jQuery.post(ajax_object.ajaxurl, data, function(response) {
+            //     // alert('Got this from the server: ' + response);
+            //     var obj= JSON.parse(response);
+            //     var html = '';
+            //     obj.forEach(function (arrayItem) {
+            //         console.log(arrayItem);
+            //         var m= arrayItem.dtext;
+            //         if(arrayItem.texttype=='0')
+            //             html+= '<div style="float: right">'+ arrayItem.dtext +'</div><br>';
+            //         else
+            //             html+= '<div style="float: left">'+ arrayItem.dtext +'</div><br>';
+            //
+            //         //jQuery('#chatbox').append('<div>'+ arrayItem.dtext +'</div>')
+            //     });
+            //     jQuery('#chatbox').html(html);
+            //
+            // });
+
+        }, 3000);
+    }
+    if(jQuery("div").hasClass("inbox_chat")){
+        setInterval(function(){
+            //alert(jQuery('#cid').val());
+            //var id=jQuery('#cid').val();
+            var data = {
+                'action': 'get_chat_list',
+            };
+            jQuery.post(ajax_object.ajaxurl, data, function(response) {
+                // alert('Got this from the server: ' + response);
+                // var obj= JSON.parse(response);
+                // var html = '';
+                // obj.forEach(function (arrayItem) {
+                //     console.log(arrayItem);
+                //     var m= arrayItem.dtext;
+                //     if(arrayItem.texttype=='0')
+                //         html+= '<div style="float: right">'+ arrayItem.dtext +'</div><br>';
+                //     else
+                //         html+= '<div style="float: left">'+ arrayItem.dtext +'</div><br>';
+                //
+                //     //jQuery('#chatbox').append('<div>'+ arrayItem.dtext +'</div>')
+                // });
+                jQuery('.inbox_chat').html(response);
 
             });
 
@@ -214,3 +310,56 @@ jQuery( document ).ready(function() {
 //     alert();
 //
 // }
+function divclick(id) {
+    //alert(id);
+    var data = {
+        'action': 'get_chat',
+        'cid': id
+    };
+    jQuery.post(ajax_object.ajaxurl, data, function(response) {
+        // alert('Got this from the server: ' + response);
+        var obj= JSON.parse(response);
+        var html = '';
+        obj.forEach(function (arrayItem) {
+            console.log(arrayItem);
+            var m= arrayItem.dtext;
+            if(arrayItem.texttype=='0')
+            {
+                html+='<div class="outgoing_msg">';
+                html+='<div class="sent_msg">';
+                html+='<p>'+ arrayItem.dtext +'</p>';
+                html+='<span class="time_date"> 11:01 AM    |    June 9</span></div>';
+                html+='</div>';
+
+            }
+                //html+= '<div style="float: right; width: 100%;text-align: right">'+ arrayItem.dtext +'</div><br>';
+            else
+            {
+                html+='<div class="incoming_msg">';
+                html+='<div class="incoming_msg_img"><img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>';
+                html+='<div class="received_msg">';
+                html+='<div class="received_withd_msg">'
+                html+='<p>'+ arrayItem.dtext +'</p>';
+                html+='<span class="time_date"> 11:01 AM    |    June 9</span></div>';
+                html+='</div>';
+                html+='</div>';
+            }
+
+                //html+= '<div style="float: left;  width: 100%;text-align: left">'+ arrayItem.dtext +'</div><br>';
+
+            //jQuery('#chatbox').append('<div>'+ arrayItem.dtext +'</div>')
+        });
+        jQuery('#chatbox').html(html);
+
+    });
+    var data = {
+        'action': 'update_chat_admin',
+        'cid': id
+    };
+    jQuery.post(ajax_object.ajaxurl, data, function(response) {
+        //alert(response);
+        jQuery('#notifiy').css('display','none');
+    });
+    jQuery('#cid').val(id);
+
+}

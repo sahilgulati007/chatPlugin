@@ -4,7 +4,7 @@ function chat_list()
     global $wpdb;
     $table_name = $wpdb->prefix . 'chat';
     $result = $wpdb->get_results("select * from " . $table_name);
-    echo "<div class='chat_list'>";
+    echo "<div class='chat_list_my'>";
     foreach ($result as $r) {
         $table_name_new = $wpdb->prefix . 'chat_detail';
         $resultnew= $wpdb->get_results("select * from ".$table_name_new." where cid=".$r->cid ." and texttype='1' and notifiy='1' order by cdid");
