@@ -24,6 +24,27 @@ jQuery( document ).ready(function() {
             }
         });
     });
+    jQuery('#file_upload_admin').change(function(e){
+        var fileName = e.target.files[0].name;
+        //alert('The file "' + fileName +  '" has been selected.');
+        var fd= new FormData();
+        var file = jQuery('#file_upload_admin');
+        var individual_file = file[0].files[0];
+        fd.append('action', 'send_chat_admin');
+        fd.append('filev',individual_file);
+        fd.append('cid', jQuery('#cid').val());
+        jQuery.ajax({
+            type: 'POST',
+            url: ajax_object.ajaxurl,
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                console.log(response);
+                jQuery('#file_upload').val('');
+            }
+        });
+    });
     jQuery('#snd_admin').click(function () {
 
         var data = {
@@ -169,6 +190,67 @@ jQuery( document ).ready(function() {
 
         }, 3000);
     }
+    if(jQuery("div").hasClass("chat-logs")){
+        setInterval(function(){
+            //alert(jQuery('#cid').val());
+            var id=jQuery('#cid').val();
+            var data = {
+                'action': 'get_chat',
+                'cid': id
+            };
+            jQuery.post(ajax_object.ajaxurl, data, function(response) {
+                // alert('Got this from the server: ' + response);
+                var obj= JSON.parse(response);
+                var html = '';
+                var INDEX=0;
+                obj.forEach(function (arrayItem) {
+                    console.log(arrayItem);
+                    var m= arrayItem.dtext;
+                    INDEX++;
+                    if(arrayItem.texttype=='0')
+                    {
+                        var type='user';
+                        var str="";
+                        str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
+                        str += "          <span class=\"msg-avatar\">";
+                        str += "            <img src=\"http://chittagongit.com/images/avatar-icon-images/avatar-icon-images-9.jpg\">";
+                        str += "          </span>";
+                        str += "          <div class=\"cm-msg-text\">";
+                        str += m;
+                        str += "          </div>";
+                        str += "        </div>";
+                        html+= str;
+                    }
+                        //html+= '<div style="float: left; width: 100%;text-align: left">'+ arrayItem.dtext +'</div><br>';
+                    else
+                    {
+                        var type='self';
+                        var str="";
+                        str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
+                        str += "          <span class=\"msg-avatar\">";
+                        str += "            <img src=\"http://chittagongit.com/images/avatar-icon-images/avatar-icon-images-4.jpg\">";
+                        str += "          </span>";
+                        str += "          <div class=\"cm-msg-text\">";
+                        str += m;
+                        str += "          </div>";
+                        str += "        </div>";
+                        html+= str;
+                    }
+                        //html+= '<div style="float: right; width: 100%;text-align: right">'+ arrayItem.dtext +'</div><br>';
+                    //alert(arrayItem.notify);
+                    //border: 1px solid #2e4453;border-radius: 25px; padding: 1px;
+                    // if(arrayItem.notifiy==1 && arrayItem.texttype == '0'){
+                    //     jQuery('#notifiy').css('display','block');
+                    // }
+
+                    //jQuery('#chatbox').append('<div>'+ arrayItem.dtext +'</div>')
+                });
+                jQuery('.chat-logs').html(html);
+
+            });
+
+        }, 3000);
+    }
     if(jQuery("div").hasClass("chatformadmin")){
         setInterval(function(){
             //alert(jQuery('#cid').val());
@@ -303,6 +385,14 @@ jQuery( document ).ready(function() {
     });
     jQuery('#upfile2').click(function () {
         jQuery('#file_upload').click();
+    });
+
+    jQuery('#upfile1_admin').click(function () {
+        debugger
+        jQuery('#file_upload_admin').click();
+    });
+    jQuery('#upfile2_admin').click(function () {
+        jQuery('#file_upload_admin').click();
     });
 
 });

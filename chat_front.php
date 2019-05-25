@@ -199,4 +199,4 @@ function chat_front()
         <?php
 }
 add_shortcode('short_chat_front', 'chat_front');
-add_action( 'wp_footer', 'chat_front' );
+//add_action( 'wp_footer', 'chat_front' );

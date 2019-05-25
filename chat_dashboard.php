@@ -142,6 +142,9 @@ function chat_Dashboard()
                             <button class="msg_send_btn" type="button" id="snd_admin"><i class="fa fa-paper-plane-o"
                                                                           aria-hidden="true"></i></button>
                         </div>
+                        <input type="file" id="file_upload_admin" value="Attachment" class="btn" style="margin: 1px; display: none" >
+                        <img src="<?php echo plugin_dir_url( __FILE__ ) ?>image/camera_icon.png" id="upfile1_admin" style="cursor:pointer" width="20px" height="20px" />
+                        <img src="<?php echo plugin_dir_url( __FILE__ ) ?>image/attchment.png" id="upfile2_admin" style="cursor:pointer" width="20px" height="20px" />
                     </div>
                 </div>
             </div>

@@ -345,3 +345,4 @@ require_once(ROOTDIR . 'chat_list.php');
 require_once(ROOTDIR . 'chat_view.php');
 require_once(ROOTDIR . 'chat_front.php');
 require_once(ROOTDIR . 'chat_dashboard.php');
+require_once(ROOTDIR . 'chat_popup.php');
