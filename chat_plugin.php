@@ -78,7 +78,7 @@ function so_enqueue_scripts(){
     wp_localize_script(
         'ajaxHandle',
         'ajax_object',
-        array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
+        array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'pluginurl' => plugin_dir_url( __FILE__ ) )
     );
 }
 function plugin_enqueue_script() {
@@ -110,7 +110,7 @@ function send_chat() {
             if(in_array($ext,$allowed) ) {
             echo "File Upload Successfully";
             $cid =$_POST['cid'];
-            $msg = '<img src="'.$movefile['url'].'" width=300 height=300>';
+            $msg = '<img src="'.$movefile['url'].'" width="100%" height="auto">';
             }
             else {
                 $msg = '<a href="'.$movefile['url'].'" target="_BLANK">'.$_FILES['filev']['name'].'</a> ';
@@ -169,7 +169,7 @@ function send_chat_admin() {
             if(in_array($ext,$allowed) ) {
                 echo "File Upload Successfully";
                 $cid =$_POST['cid'];
-                $msg = '<img src="'.$movefile['url'].'" width=300 height=300>';
+                $msg = '<img src="'.$movefile['url'].'" width="100%" height="auto">';
             }
             else {
                 $msg = '<a href="'.$movefile['url'].'" target="_BLANK">'.$_FILES['filev']['name'].'</a> ';
@@ -316,9 +316,8 @@ function get_chat_list(){
                                 <div class="chat_img"><img src="https://ptetutorials.com/images/user-profile.png"
                                                            alt="sunil"></div>
                                 <div class="chat_ib">
-                                    <h5>'.$r->cnm.' <span class="chat_date">Dec 25<span style="background: #993300;font-size: 12px;font-weight: bolder;color: white;padding: 5px;border-radius: 25px">'.$rowcount.'</span></span></h5>
-                                    <p>Test, which is a new approach to have all solutions
-                                        astrology under one roof.</p>
+                                    <h5>'.$r->cnm.' <span class="chat_date"><span style="background: #993300;font-size: 12px;font-weight: bolder;color: white;padding: 5px;border-radius: 25px">'.$rowcount.'</span></span></h5>
+                                    <p></p>
                                 </div>
                             </div>
                         </div>';
@@ -329,9 +328,8 @@ function get_chat_list(){
                                 <div class="chat_img"><img src="https://ptetutorials.com/images/user-profile.png"
                                                            alt="sunil"></div>
                                 <div class="chat_ib">
-                                    <h5>'.$r->cnm.' <span class="chat_date">Dec 25</span></h5>
-                                    <p>Test, which is a new approach to have all solutions
-                                        astrology under one roof.</p>
+                                    <h5>'.$r->cnm.' <span class="chat_date"></span></h5>
+                                    <p></p>
                                 </div>
                             </div>
                         </div>';

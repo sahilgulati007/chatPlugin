@@ -1,6 +1,13 @@
 jQuery( document ).ready(function() {
+    jQuery('#notifiy').css('display','none');
     if(sessionStorage.getItem("cid")){
         jQuery('#cid').val(sessionStorage.getItem("cid"));
+        jQuery('#loginform').css('display','none');
+    }
+    else {
+        jQuery('.chat-box-body').css('display','none');
+        jQuery('.chat-input').css('display','none');
+        jQuery('#upload_div').css('display','none');
     }
     //alert();
     jQuery('#file_upload').change(function(e){
@@ -134,12 +141,15 @@ jQuery( document ).ready(function() {
         //alert(ajax_object.ajaxurl);
         //sessionStorage.setItem("cname",jQuery('#cname').val());
         if(jQuery('#cname').val()=='' && jQuery('#em').val()==''){
+            jQuery('#invalidem').css('display','block');
             return;
         }
         var x=jQuery('#em').val();
         var atposition=x.indexOf("@");
         var dotposition=x.lastIndexOf(".");
         if (atposition<1 || dotposition<atposition+2 || dotposition+2>=x.length){
+            debugger
+            jQuery('#invalidem').css('display','block');
             return;
         }
         var data = {
@@ -152,7 +162,14 @@ jQuery( document ).ready(function() {
             //alert('Got this from the server: ' + response);
             //jQuery('#cid').val(response);
             sessionStorage.setItem("cid",response);
-            document.getElementById("myForm").style.display = "block";
+            //document.getElementById("myForm").style.display = "block";
+            //jQuery('#chat-circle').click();
+            jQuery('#invalidem').css('display','none');
+            jQuery('.chat-box-body').css('display','block');
+            jQuery('.chat-input').css('display','block');
+            jQuery('#upload_div').css('display','block');
+            jQuery('#cid').val(sessionStorage.getItem("cid"));
+            jQuery('#loginform').css('display','none');
             // location.reload();
         });
     });
@@ -213,7 +230,7 @@ jQuery( document ).ready(function() {
                         var str="";
                         str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
                         str += "          <span class=\"msg-avatar\">";
-                        str += "            <img src=\"http://chittagongit.com/images/avatar-icon-images/avatar-icon-images-9.jpg\">";
+                        str += "            <img src='"+ajax_object.pluginurl+"image/avatar-icon-images-9.jpg'>";
                         str += "          </span>";
                         str += "          <div class=\"cm-msg-text\">";
                         str += m;
@@ -228,7 +245,7 @@ jQuery( document ).ready(function() {
                         var str="";
                         str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
                         str += "          <span class=\"msg-avatar\">";
-                        str += "            <img src=\"http://chittagongit.com/images/avatar-icon-images/avatar-icon-images-4.jpg\">";
+                        str += "            <img src='"+ajax_object.pluginurl+"image/avatar-icon-images-4.jpg'>";
                         str += "          </span>";
                         str += "          <div class=\"cm-msg-text\">";
                         str += m;
@@ -239,9 +256,9 @@ jQuery( document ).ready(function() {
                         //html+= '<div style="float: right; width: 100%;text-align: right">'+ arrayItem.dtext +'</div><br>';
                     //alert(arrayItem.notify);
                     //border: 1px solid #2e4453;border-radius: 25px; padding: 1px;
-                    // if(arrayItem.notifiy==1 && arrayItem.texttype == '0'){
-                    //     jQuery('#notifiy').css('display','block');
-                    // }
+                    if(arrayItem.notifiy==1 && arrayItem.texttype == '0'){
+                        jQuery('#notifiy').css('display','block');
+                    }
 
                     //jQuery('#chatbox').append('<div>'+ arrayItem.dtext +'</div>')
                 });

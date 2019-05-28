@@ -5,12 +5,25 @@ function chat_popup()
     <div id="chat-circle" class="btn btn-raised">
         <div id="chat-overlay"></div>
         <i class="material-icons">speaker_phone</i>
+        <i class="material-icons" style="color: red" id="notifiy">notification_important</i>
     </div>
 
     <div class="chat-box">
         <div class="chat-box-header">
             ChatBot
-            <span class="chat-box-toggle"><i class="material-icons">close</i></span>
+            <span class="chat-box-toggle-close"><i class="material-icons">close</i></span>
+            <span class="chat-box-toggle"><i class="material-icons">minimize</i></span>
+        </div>
+        <div id="loginform">
+            <form action="" method="post">
+                <p><b>Please enter your name and Email to continue:</b></p>
+                <p style="color: red;" id="invalidem">Enter a valid email and name </p>
+
+                <input type="text" name="cname" id="cname" placeholder="Enter Name" style="width: 97%;" /><br><br>
+
+                <input type="text" name="em" id="em" placeholder="Enter Email" style="width: 97%;" /><br><br>
+                <input type="button" name="enter" id="enter" value="Enter" style="width: 100%; margin: 1px;background:#5A5EB9;background-color: #5A5EB9 !important;border-bottom-color: #5A5EB9 !important;color: #fff !important; "/>
+            </form>
         </div>
         <div class="chat-box-body">
             <div class="chat-box-overlay">
@@ -19,15 +32,25 @@ function chat_popup()
 
             </div><!--chat-log -->
         </div>
+        <div style="background: transparent" id="upload_div">
+            <input type="file" id="file_upload" value="Attachment" class="btn" style="margin: 1px; display: none" >
+            <button type="button" class="photo-submit" id="upfile1"><i class="material-icons">photo_camera</i></button>
+            <button type="button" class="photo-submit" id="upfile2"><i class="material-icons">attach_file</i></button>
+        </div>
         <div class="chat-input">
             <form>
-                <input type="hidden" id="cid" value="31">
-                <input type="text" id="chat-input" placeholder="Send a message..."/>
-                <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
+                <input type="hidden" id="cid" value="">
+                <input type="text" id="usermsg" placeholder="Send a message..."/>
+                <button type="button" class="chat-submit" id="snd"><i class="material-icons">send</i></button>
             </form>
         </div>
+
     </div>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+        #invalidem{
+            display: none;
+        }
         html, body {
             background: #efefef;
             height:100%;
@@ -49,6 +72,7 @@ function chat_popup()
             width: 80px;
             height: 80px;
             border-radius: 50%;
+            box-sizing: border-box;
             color: white;
             padding: 28px;
             cursor: pointer;
@@ -94,6 +118,11 @@ function chat_popup()
             margin-right:15px;
             cursor:pointer;
         }
+        .chat-box-toggle-close {
+            float:right;
+            margin-right:15px;
+            cursor:pointer;
+        }
         .chat-box-header {
             background: #5A5EB9;
             height:70px;
@@ -103,6 +132,7 @@ function chat_popup()
             text-align:center;
             font-size:20px;
             padding-top:17px;
+            box-sizing: border-box;
         }
         .chat-box-body {
             position: relative;
@@ -142,6 +172,25 @@ function chat_popup()
             border-bottom-left-radius:5px;
             overflow:hidden;
         }
+        #usermsg {
+            background: #f4f7f9;
+            width:100%;
+            position:relative;
+            height:47px;
+            padding-top:10px;
+            padding-right:50px;
+            padding-bottom:10px;
+            padding-left:15px;
+            border:none;
+            resize:none;
+            outline:none;
+            border:1px solid #ccc;
+            color:#888;
+            border-top:none;
+            border-bottom-right-radius:5px;
+            border-bottom-left-radius:5px;
+            overflow:hidden;
+        }
         .chat-input > form {
             margin-bottom: 0;
         }
@@ -157,17 +206,31 @@ function chat_popup()
         #chat-input:-moz-placeholder { /* Firefox 18- */
             color: #ccc;
         }
-        .chat-submit {
+        button.chat-submit {
             position:absolute;
-            bottom:3px;
+            bottom:6px;
             right:10px;
             background: transparent;
-            box-shadow:none;
+            box-shadow:none !important;
             border:none;
-            border-radius:50%;
-            color:#5A5EB9;
+            border-radius:50% !important;
+            color:#5A5EB9 !important;
             width:35px;
             height:35px;
+            padding: 0;
+        }
+        button.photo-submit {
+            /*position:absolute;*/
+            /*bottom:25px;*/
+            /*right:10px;*/
+            background: transparent;
+            box-shadow:none !important;
+            border:none;
+            border-radius:50% !important;
+            color:#5A5EB9 !important;
+            width:35px;
+            height:35px;
+            padding: 0;
         }
         .chat-logs {
             padding:15px;
@@ -336,6 +399,19 @@ function chat_popup()
             $("#chat-circle").click(function() {
                 $("#chat-circle").toggle('scale');
                 $(".chat-box").toggle('scale');
+                var id=jQuery('#cid').val();
+                //alert(id);
+                var data = {
+                    'action': 'update_chat',
+                    'cid': id
+                };
+                jQuery.post(ajax_object.ajaxurl, data, function(response) {
+                    //alert(response);
+                    jQuery('#notifiy').css('display','none');
+
+                });
+
+                setTimeout(function(){jQuery("#chatbox").animate({ scrollTop: $('#chatbox').prop("scrollHeight")}, 0);},3000);
             })
 
             $(".chat-box-toggle").click(function() {
@@ -343,7 +419,20 @@ function chat_popup()
                 $(".chat-box").toggle('scale');
             })
 
+            $(".chat-box-toggle-close").click(function() {
+                $("#chat-circle").toggle('scale');
+                $(".chat-box").toggle('scale');
+                sessionStorage.removeItem('cid');
+                jQuery('#cid').val('');
+                jQuery('.chat-box-body').css('display','none');
+                jQuery('.chat-input').css('display','none');
+                jQuery('#upload_div').css('display','none');
+                jQuery('#loginform').css('display','block');
+
+            })
+
         })
+
     </script>
     <?php
 }
