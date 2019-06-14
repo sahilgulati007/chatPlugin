@@ -42,6 +42,12 @@ function chat_Dashboard()
                             $table_name_new = $wpdb->prefix . 'chat_detail';
                             $resultnew= $wpdb->get_results("select * from ".$table_name_new." where cid=".$r->cid ." and texttype='1' and notifiy='1' order by cdid");
                             $rowcount = $wpdb->num_rows;
+                            //SELECT * FROM `wp_chat_detail` WHERE cid=31 ORDER BY cdid DESC LIMIT 0,1
+                            $resultmsg= $wpdb->get_results("select * from ".$table_name_new." where cid=".$r->cid ." order by cdid DESC LIMIT 0,1");
+                            //print_r($resultmsg);
+                            foreach($resultmsg as $rmsg) {
+                                $lmsg = $rmsg->dtext;
+                            }
                             //echo "select * from ".$table_name_new." where cid=".$r->cid ." and texttype='1' and notifiy='1' order by cdid";
                             if($rowcount>0){
                                 echo '<div class="chat_list active_chat" onclick="divclick('.$r->cid.')">
@@ -50,7 +56,7 @@ function chat_Dashboard()
                                                            alt="sunil"></div>
                                 <div class="chat_ib">
                                     <h5>'.$r->cnm.' <span class="chat_date"><span style="background: #993300;font-size: 12px;font-weight: bolder;color: white;padding: 5px;border-radius: 25px">'.$rowcount.'</span></span></h5>
-                                    <p></p>
+                                    <p>'.$lmsg.'</p>
                                 </div>
                             </div>
                         </div>';
@@ -62,7 +68,7 @@ function chat_Dashboard()
                                                            alt="sunil"></div>
                                 <div class="chat_ib">
                                     <h5>'.$r->cnm.' <span class="chat_date"></span></h5>
-                                    <p></p>
+                                    <p>'.$lmsg.'</p>
                                 </div>
                             </div>
                         </div>';
